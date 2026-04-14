@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\scoring\migrations\0001_initial.py
+# hypothesis_version: 6.151.12
+
+[100, '-computed_at', '0001_initial', 'FraudRiskScore', 'ID', 'computed_at', 'db_table', 'fraud_risk_scores', 'id', 'indexes', 'ml_anomaly_score', 'ml_collusion_score', 'model_version', 'ordering', 'score', 'tender', 'tenders', 'tenders.tender', 'weight_config']

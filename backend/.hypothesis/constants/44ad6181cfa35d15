@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\graph\migrations\0001_initial.py
+# hypothesis_version: 6.151.12
+
+[255, '0001_initial', 'CO_BID', 'Co-Bid', 'CollusionRing', 'GraphEdge', 'GraphNode', 'ID', 'SHARED_ADDRESS', 'SHARED_DIRECTOR', 'Shared Address', 'Shared Director', 'bidder', 'bids', 'bids.bidder', 'created_at', 'db_table', 'detected_at', 'edge_type', 'graph.graphnode', 'graph_collusionring', 'graph_edges', 'graph_graphedge', 'graph_graphnode', 'graph_node', 'id', 'incoming_edges', 'indexes', 'is_active', 'member_bidder_ids', 'member_count', 'metadata', 'outgoing_edges', 'ring_id', 'source_node', 'target_node', 'tender', 'tenders', 'tenders.tender', 'updated_at']

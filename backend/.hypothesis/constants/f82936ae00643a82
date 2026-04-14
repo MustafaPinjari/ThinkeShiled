@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\conftest.py
+# hypothesis_version: 6.151.12
+
+['127.0.0.1', ':memory:', 'BACKEND', 'DB_HOST', 'ENGINE', 'NAME', 'USE_MYSQL_FOR_TESTS', 'config.settings', 'db', 'default', 'localhost']

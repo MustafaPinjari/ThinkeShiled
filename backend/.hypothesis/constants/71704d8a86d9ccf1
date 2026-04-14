@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\graph\collusion_graph.py
+# hypothesis_version: 6.151.12
+
+['-computed_at', '-score', '-severity', 'CO_BID', 'CollusionRing', 'GraphNode', 'LOW', 'SHARED_ADDRESS', 'SHARED_DIRECTOR', 'bidder', 'bidder_id', 'bidder_name', 'collusion_ring', 'edges', 'flag_type', 'fraud_score', 'id', 'label', 'metadata', 'nodes', 'risk_status', 'severity', 'shared_address', 'shared_directors', 'source', 'source_node__bidder', 'source_node_id', 'target', 'target_node__bidder', 'target_node_id', 'tender_id', 'trigger_data', 'type', 'updated_at']

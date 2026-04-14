@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\tenders\migrations\0001_initial.py
+# hypothesis_version: 6.151.12
+
+[255, 500, 'ACTIVE', 'AWARDED', 'Active', 'Awarded', 'CANCELLED', 'CLOSED', 'Cancelled', 'Closed', 'ID', 'INR', 'Tender', 'buyer_id', 'buyer_name', 'category', 'created_at', 'currency', 'db_table', 'estimated_value', 'id', 'indexes', 'publication_date', 'status', 'submission_deadline', 'tender_id', 'tenders_tender', 'title', 'updated_at']

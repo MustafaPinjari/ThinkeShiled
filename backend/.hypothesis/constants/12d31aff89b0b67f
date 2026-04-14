@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\scoring\models.py
+# hypothesis_version: 6.151.12
+
+[100, '-computed_at', '-created_at', 'authentication.User', 'computed_at', 'fraud_risk_scores', 'scoring_weightconfig', 'tender', 'tenders.Tender']

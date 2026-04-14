@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\xai\models.py
+# hypothesis_version: 6.151.12
+
+[100, 500, '-computed_at', 'ISOLATION_FOREST', 'Isolation Forest', 'RANDOM_FOREST', 'Random Forest', 'computed_at', 'failed', 'is_active', 'model_type', 'ok', 'shap_explanations', 'tender', 'tenders.Tender', 'xai_mlmodelversion', 'xai_shapexplanation']

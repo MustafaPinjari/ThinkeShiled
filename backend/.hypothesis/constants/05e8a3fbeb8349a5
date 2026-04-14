@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\config\celery.py
+# hypothesis_version: 6.151.12
+
+['CELERY', 'config.settings', 'django.conf:settings', 'tendershield']

@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\audit\migrations\0002_initial.py
+# hypothesis_version: 6.151.12
+
+['0001_initial', 'affected_entity_id', 'affected_entity_type', 'audit', 'audit_logs', 'auditlog', 'event_type', 'timestamp', 'user']

@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\conftest.py
+# hypothesis_version: 6.151.12
+
+['ATOMIC_REQUESTS', 'AUTOCOMMIT', 'CONN_HEALTH_CHECKS', 'CONN_MAX_AGE', 'OPTIONS', 'TEST', 'TIME_ZONE']

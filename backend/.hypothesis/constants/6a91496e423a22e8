@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\xai\explainer.py
+# hypothesis_version: 6.151.12
+
+[0.0, 0.1, 100, '-computed_at', '-raised_at', 'Tender', 'Tender not found', 'above', 'action', 'below', 'bid_spread_ratio', 'bidder_count', 'close together', 'computed_at', 'cv_bids', 'deadline_days', 'error', 'explanation', 'feature', 'feature_value', 'flag_type', 'id', 'model_version', 'nd', 'price_deviation_pct', 'raised_at', 'rd', 'red_flag_count', 'red_flags', 'repeat_winner_rate', 'rule_engine_version', 'rule_text', 'rule_version', 'severity', 'shap_failed', 'shap_value', 'shap_values', 'single_bidder_flag', 'spread out', 'st', 'tender_id', 'th', 'top_factors', 'trigger_data', 'winner_bid_rank']

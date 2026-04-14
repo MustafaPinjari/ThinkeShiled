@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\companies\views.py
+# hypothesis_version: 6.151.12
+
+[100, '-raised_at', '-submission_deadline', 'Not found.', 'bidder', 'bidder_name', 'category', 'cleared_at', 'collusion_ring', 'currency', 'detail', 'estimated_value', 'flag_type', 'id', 'is_active', 'page_size', 'raised_at', 'risk_status', 'rule_version', 'severity', 'status', 'submission_deadline', 'tender', 'tender_id', 'title', 'trigger_data']

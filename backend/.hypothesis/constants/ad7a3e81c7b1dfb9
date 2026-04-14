@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\bids\views.py
+# hypothesis_version: 6.151.12
+
+[200, ',', 'Bid', 'Duplicate bid_id.', 'HTTP_X_FORWARDED_FOR', 'POST', 'REMOTE_ADDR', 'Tender not found.', 'VALIDATION_ERROR', 'accepted', 'accepted_bids', 'bid_amount', 'bid_id', 'bidder', 'bidder_id', 'code', 'detail', 'details', 'error', 'errors', 'index', 'message', 'page_size', 'rejected', 'rejected_bids', 'submission_timestamp', 'tender_id']

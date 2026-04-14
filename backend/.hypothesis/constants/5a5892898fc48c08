@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\bids\migrations\0001_initial.py
+# hypothesis_version: 6.151.12
+
+[255, 500, '0001_initial', 'Bid', 'Bidder', 'ID', 'bid_amount', 'bid_id', 'bidder', 'bidder_id', 'bidder_name', 'bids', 'bids.bidder', 'bids_bid', 'bids_bidder', 'created_at', 'db_table', 'director_names', 'id', 'indexes', 'is_winner', 'registered_address', 'submission_timestamp', 'tender', 'tenders', 'tenders.tender', 'updated_at']

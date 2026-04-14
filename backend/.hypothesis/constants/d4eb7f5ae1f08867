@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\scoring\scorer.py
+# hypothesis_version: 6.151.12
+
+[0.0, 100, '-computed_at', '-created_at', 'ScoringWeights', 'Tender', 'high_flags', 'high_weight', 'medium_flags', 'medium_weight', 'ml_anomaly_score', 'ml_anomaly_weight', 'ml_collusion_score', 'ml_collusion_weight', 'model_version', 'red_flag_cap', 'score', 'severity', 'tender_id', 'weights']

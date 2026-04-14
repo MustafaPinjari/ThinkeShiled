@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\detection\models.py
+# hypothesis_version: 6.151.12
+
+[100, '1.0', 'COVER_BID_PATTERN', 'Cover Bid Pattern', 'HIGH', 'High', 'LINKED_ENTITIES', 'LOW', 'Linked Entities', 'Low', 'MEDIUM', 'Medium', 'PRICE_ANOMALY', 'Price Anomaly', 'REPEAT_WINNER', 'Repeat Winner', 'SHORT_DEADLINE', 'SINGLE_BIDDER', 'Short Deadline', 'Single Bidder', 'bids.Bidder', 'cleared_at', 'detection_redflag', 'flag_type', 'is_active', 'red_flags', 'severity', 'tender', 'tenders.Tender']

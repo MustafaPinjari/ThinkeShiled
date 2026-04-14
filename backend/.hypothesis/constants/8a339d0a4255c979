@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\detection\serializers.py
+# hypothesis_version: 6.151.12
+
+['created_at', 'description', 'id', 'is_active', 'parameters', 'rule_code', 'severity', 'updated_at']

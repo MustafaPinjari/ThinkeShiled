@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\graph\admin.py
+# hypothesis_version: 6.151.12
+
+['bidder', 'created_at', 'detected_at', 'edge_type', 'is_active', 'member_count', 'ring_id', 'source_node', 'target_node', 'tender', 'updated_at']

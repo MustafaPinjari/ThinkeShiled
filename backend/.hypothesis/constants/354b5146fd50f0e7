@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\authentication\migrations\0001_initial.py
+# hypothesis_version: 6.151.12
+
+[128, 150, 254, 'ADMIN', 'AUDITOR', 'Administrator', 'Auditor', 'ID', 'User', 'auth', 'auth.group', 'auth.permission', 'auth_user', 'created_at', 'db_table', 'email', 'groups', 'id', 'is_active', 'is_staff', 'is_superuser', 'last login', 'last_login', 'locked_until', 'password', 'role', 'superuser status', 'user', 'user permissions', 'user_permissions', 'user_set', 'username']

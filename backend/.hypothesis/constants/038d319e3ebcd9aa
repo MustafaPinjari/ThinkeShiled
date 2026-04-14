@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\detection\engine.py
+# hypothesis_version: 6.151.12
+
+[0.6, 100, 365, 86400, '0.40', 'RedFlag', 'RuleDefinition', 'bid_amount', 'bid_count', 'bidder', 'bidder_id', 'bidder_ids', 'bidder_names', 'category', 'cleared_at', 'delta_seconds', 'deviation_pct', 'estimated_value', 'flag_type', 'is_active', 'link_type', 'link_value', 'min_bids', 'min_days', 'publication_date', 'rule_code', 'rule_version', 'severity', 'shared_address', 'shared_director', 'submission_deadline', 'tender', 'tender_id', 'tenders_bid', 'threshold', 'total_tenders', 'trigger_data', 'win_rate_pct', 'window_days', 'winning_bid', 'wins']

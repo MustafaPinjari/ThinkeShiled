@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\authentication\urls.py
+# hypothesis_version: 6.151.12
+
+['auth-login', 'auth-logout', 'auth-refresh', 'login/', 'logout/', 'refresh/']

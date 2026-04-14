@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\alerts\alert_system.py
+# hypothesis_version: 6.151.12
+
+['-computed_at', '-id', 'Tender', 'alert_count', 'alert_ids', 'flag_type', 'score', 'severity', 'tender_id', 'threshold', 'trigger_data']

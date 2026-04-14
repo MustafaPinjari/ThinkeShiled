@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\audit\views.py
+# hypothesis_version: 6.151.12
+
+[200, '-timestamp', '/media/', 'FAILURE', 'MEDIA_URL', 'PENDING', 'SUCCESS', 'VALIDATION_ERROR', '^\\d{4}-\\d{2}-\\d{2}$', 'affected_entity_id', 'affected_entity_type', 'code', 'completed', 'data_snapshot', 'date_from', 'date_to', 'detail', 'details', 'download_url', 'entity_type', 'entry_count', 'error', 'event_type', 'failed', 'file_path', 'id', 'ip_address', 'message', 'page_size', 'pending', 'queued', 'status', 'task_id', 'timestamp', 'user', 'user_id', 'username']

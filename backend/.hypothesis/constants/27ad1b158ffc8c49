@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\authentication\jwt_auth.py
+# hypothesis_version: 6.151.12
+
+[b'.', b'=', ',', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR', 'User', 'decode', 'invalid', 'key', 'method', 'path', 'reason', 'signature', 'user_id']

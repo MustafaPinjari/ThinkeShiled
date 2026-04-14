@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\alerts\migrations\0003_alert_is_read_title_detail_link_permanently_failed.py
+# hypothesis_version: 6.151.12
+
+[500, '0002_initial', 'DELIVERED', 'Delivered', 'FAILED', 'Failed', 'PENDING', 'PERMANENTLY_FAILED', 'Pending', 'Permanently Failed', 'RETRYING', 'Retrying', 'alert', 'alerts', 'delivery_status', 'detail_link', 'is_read', 'title']

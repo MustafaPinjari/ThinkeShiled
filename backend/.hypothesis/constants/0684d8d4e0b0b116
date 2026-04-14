@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\alerts\serializers.py
+# hypothesis_version: 6.151.12
+
+[100, 'alert_type', 'category', 'created_at', 'delivered_at', 'delivery_status', 'detail_link', 'email_enabled', 'fraud_risk_score', 'id', 'is_read', 'retry_count', 'tender.id', 'tender.tender_id', 'tender_external_id', 'tender_id', 'threshold', 'title', 'top_red_flags']

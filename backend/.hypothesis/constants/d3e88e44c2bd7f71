@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\config\urls.py
+# hypothesis_version: 6.151.12
+
+['admin/', 'alerts.urls', 'api/v1/alerts/', 'api/v1/audit-log/', 'api/v1/auth/', 'api/v1/bids/', 'api/v1/companies/', 'api/v1/graph/', 'api/v1/rules/', 'api/v1/tenders/', 'audit.urls', 'authentication.urls', 'bids.urls', 'companies.urls', 'detection.urls', 'graph.urls', 'tenders.urls']

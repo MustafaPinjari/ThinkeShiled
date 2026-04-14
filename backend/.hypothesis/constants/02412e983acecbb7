@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\bids\urls.py
+# hypothesis_version: 6.151.12
+
+['bid-bulk-create', 'bid-list-create', 'bulk/']

@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\companies\models.py
+# hypothesis_version: 6.151.12
+
+['HIGH_RISK', 'High Risk', 'LOW', 'Low Risk', 'MEDIUM', 'Medium Risk', 'bids.Bidder', 'company_profile', 'company_profiles', 'graph.CollusionRing', 'risk_status']

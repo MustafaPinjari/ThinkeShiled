@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\alerts\migrations\0002_initial.py
+# hypothesis_version: 6.151.12
+
+['0001_initial', 'alert', 'alert_settings', 'alerts', 'alertsettings', 'category', 'created_at', 'delivery_status', 'tender', 'user']

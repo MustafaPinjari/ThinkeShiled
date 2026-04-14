@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\config\exceptions.py
+# hypothesis_version: 6.151.12
+
+[400, 401, 403, 404, 422, 429, 'ERROR', 'INVALID_CREDENTIALS', 'NOT_FOUND', 'PERMISSION_DENIED', 'RATE_LIMITED', 'TOKEN_EXPIRED', 'VALIDATION_ERROR', 'code', 'details', 'error', 'expired', 'message']

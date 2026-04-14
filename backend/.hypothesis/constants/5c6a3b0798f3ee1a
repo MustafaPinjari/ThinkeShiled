@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\ml_worker\services\feature_engineering.py
+# hypothesis_version: 6.151.12
+
+[0.0, 'bid_amount', 'bid_spread_ratio', 'bidder_count', 'cv_bids', 'deadline_days', 'estimated_value', 'is_winner', 'price_deviation_pct', 'publication_date', 'repeat_winner_rate', 'single_bidder_flag', 'submission_deadline', 'winner_bid_rank']

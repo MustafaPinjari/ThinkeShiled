@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\ml_worker\train.py
+# hypothesis_version: 6.151.12
+
+[0.0, 0.05, 1.0, 100, '%Y%m%dT%H%M%S', 'ISOLATION_FOREST', 'ML_MODEL_PATH', 'RANDOM_FOREST', 'balanced', 'bid_spread_ratio', 'bidder_count', 'cv_bids', 'deadline_days', 'model', 'models', 'price_deviation_pct', 'repeat_winner_rate', 'scaler', 'single_bidder_flag', 'winner_bid_rank']

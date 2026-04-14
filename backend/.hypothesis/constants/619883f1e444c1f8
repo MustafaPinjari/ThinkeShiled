@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\audit\tasks.py
+# hypothesis_version: 6.151.12
+
+[0.25, 0.4, 0.6, 0.8, 1.5, 3.5, 4.5, '#2c3e50', '#f2f2f2', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S', 'AuditLog', 'BACKGROUND', 'Entity', 'Entity ID', 'Event Type', 'FONTNAME', 'FONTSIZE', 'GRID', 'Helvetica-Bold', 'LEFTPADDING', 'MEDIA_ROOT', 'Normal', 'RIGHTPADDING', 'ROWBACKGROUNDS', 'TEXTCOLOR', 'TOP', 'Timestamp (UTC)', 'Title', 'User', 'VALIGN', 'audit_exports', 'completed', 'date_from', 'date_to', 'entry_count', 'file', 'file_path', 'media', 'status', 'system', 'task_id', 'timestamp', 'user', 'wb', '—']

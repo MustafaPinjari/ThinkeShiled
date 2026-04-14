@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\authentication\models.py
+# hypothesis_version: 6.151.12
+
+[150, 'ADMIN', 'AUDITOR', 'Administrator', 'Auditor', 'Email is required', 'Username is required', 'auth_user', 'email', 'is_staff', 'is_superuser', 'role', 'username']

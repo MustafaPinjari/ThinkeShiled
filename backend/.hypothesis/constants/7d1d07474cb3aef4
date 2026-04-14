@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\authentication\views.py
+# hypothesis_version: 6.151.12
+
+[',', '10/m', 'Account locked.', 'HTTP_X_FORWARDED_FOR', 'Invalid credentials.', 'REMOTE_ADDR', 'User', 'access', 'detail', 'expires_in', 'failed_attempts', 'ip', 'locked_until', 'password', 'post', 'refresh', 'role', 'username']

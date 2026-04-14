@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\alerts\tasks.py
+# hypothesis_version: 6.151.12
+
+['-id', 'Alert', 'alert_id', 'delivered_at', 'delivery_status', 'error', 'permanently_failed', 'retry_count', 'tender', 'tender_id', 'user']

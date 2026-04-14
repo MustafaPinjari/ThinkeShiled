@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\graph\serializers.py
+# hypothesis_version: 6.151.12
+
+['detected_at', 'is_active', 'member_bidder_ids', 'member_count', 'ring_id']

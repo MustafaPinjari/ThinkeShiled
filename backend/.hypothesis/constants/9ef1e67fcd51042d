@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\companies\serializers.py
+# hypothesis_version: 6.151.12
+
+['avg_bid_deviation', 'bidder.bidder_id', 'bidder.bidder_name', 'bidder_id', 'bidder_name', 'collusion_ring_id', 'id', 'risk_status', 'total_bids', 'total_wins', 'updated_at', 'win_rate']

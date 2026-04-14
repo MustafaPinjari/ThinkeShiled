@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\alerts\models.py
+# hypothesis_version: 6.151.12
+
+[255, 500, '-created_at', 'COLLUSION_RING', 'DELIVERED', 'Delivered', 'FAILED', 'Failed', 'HIGH_RISK_SCORE', 'High Risk Score', 'PENDING', 'PERMANENTLY_FAILED', 'Pending', 'Permanently Failed', 'RED_FLAG', 'RETRYING', 'Red Flag Raised', 'Retrying', 'alert_settings', 'alerts', 'alerts_alert', 'alerts_alertsettings', 'category', 'created_at', 'delivery_status', 'global', 'tender', 'tenders.Tender', 'user']

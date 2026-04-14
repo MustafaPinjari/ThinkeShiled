@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\tenders\urls.py
+# hypothesis_version: 6.151.12
+
+['<int:pk>/', '<int:pk>/red-flags/', '<int:pk>/rescore/', '<int:pk>/score/', '<int:pk>/status/', 'stats/', 'tender-csv-upload', 'tender-detail', 'tender-explanation', 'tender-list-create', 'tender-red-flags', 'tender-rescore', 'tender-score', 'tender-score-history', 'tender-stats', 'tender-status-change', 'upload/']

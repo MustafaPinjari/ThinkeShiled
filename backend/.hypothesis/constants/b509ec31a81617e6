@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\scoring\migrations\0002_scoring_weight_config.py
+# hypothesis_version: 6.151.12
+
+['-created_at', '0001_initial', 'ID', 'ScoringWeightConfig', 'created_at', 'created_by', 'db_table', 'id', 'is_active', 'ordering', 'scoring', 'scoring_weightconfig', 'weights']

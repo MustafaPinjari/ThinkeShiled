@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\detection\migrations\0001_initial.py
+# hypothesis_version: 6.151.12
+
+[100, '0001_initial', '1.0', 'COVER_BID_PATTERN', 'Cover Bid Pattern', 'HIGH', 'High', 'ID', 'LINKED_ENTITIES', 'LOW', 'Linked Entities', 'Low', 'MEDIUM', 'Medium', 'PRICE_ANOMALY', 'Price Anomaly', 'REPEAT_WINNER', 'RedFlag', 'Repeat Winner', 'RuleDefinition', 'SHORT_DEADLINE', 'SINGLE_BIDDER', 'Short Deadline', 'Single Bidder', 'bidder', 'bids', 'bids.bidder', 'cleared_at', 'created_at', 'db_table', 'description', 'detection_redflag', 'flag_type', 'id', 'indexes', 'is_active', 'parameters', 'raised_at', 'red_flags', 'rule_code', 'rule_version', 'severity', 'tender', 'tenders', 'tenders.tender', 'trigger_data', 'updated_at']

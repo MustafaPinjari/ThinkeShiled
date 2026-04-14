@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\tenders\serializers.py
+# hypothesis_version: 6.151.12
+
+[255, 500, 'buyer_id', 'buyer_name', 'category', 'created_at', 'currency', 'estimated_value', 'id', 'latest_score', 'publication_date', 'status', 'submission_deadline', 'tender_id', 'title', 'updated_at']

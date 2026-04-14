@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\graph\models.py
+# hypothesis_version: 6.151.12
+
+[255, 'CO_BID', 'Co-Bid', 'SHARED_ADDRESS', 'SHARED_DIRECTOR', 'Shared Address', 'Shared Director', 'bids.Bidder', 'edge_type', 'graph_collusionring', 'graph_edges', 'graph_graphedge', 'graph_graphnode', 'graph_node', 'incoming_edges', 'is_active', 'outgoing_edges', 'source_node', 'target_node', 'tenders.Tender']

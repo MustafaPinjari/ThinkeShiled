@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\backend\companies\migrations\0001_initial.py
+# hypothesis_version: 6.151.12
+
+['0001_initial', 'CompanyProfile', 'HIGH_RISK', 'High Risk', 'ID', 'LOW', 'Low Risk', 'MEDIUM', 'Medium Risk', 'avg_bid_deviation', 'bidder', 'bids', 'bids.bidder', 'collusion_ring', 'company_profile', 'company_profiles', 'db_table', 'graph', 'graph.collusionring', 'id', 'indexes', 'risk_status', 'total_bids', 'total_wins', 'updated_at', 'win_rate']
