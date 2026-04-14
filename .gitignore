@@ -1,0 +1,51 @@
+# ── Environment ───────────────────────────────────────────────────────────────
+.env
+*.pem
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+
+# ── Django ────────────────────────────────────────────────────────────────────
+backend/staticfiles/
+backend/media/
+backend/db.sqlite3
+
+# ── ML models ─────────────────────────────────────────────────────────────────
+ml_worker/models/*.pkl
+ml_worker/models/*.joblib
+
+# ── Next.js ───────────────────────────────────────────────────────────────────
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+.pytest_cache/
+backend/.pytest_cache/
+backend/.hypothesis/
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+docker/data/
+
+# ── IDE / OS ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
