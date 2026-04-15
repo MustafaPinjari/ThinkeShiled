@@ -796,7 +796,7 @@ class EmailNotificationIntegrationTest(TestCase):
         alert = Alert.objects.create(
             tender=tender,
             user=self.auditor,
-            alert_type=AlertType.HIGH_RISK,
+            alert_type=AlertType.HIGH_RISK_SCORE,
             fraud_risk_score=score,
             top_red_flags=[],
             detail_link=f"/tenders/{tender.pk}",

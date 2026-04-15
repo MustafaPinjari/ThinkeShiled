@@ -76,6 +76,34 @@ services:
       retries: 3
       start_period: 30s
 
+  qdrant:
+    image: qdrant/qdrant:v1.9.0
+    restart: unless-stopped
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  nlp-worker:
+    build:
+      context: .
+      dockerfile: nlp_worker/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    volumes:
+      - ./nlp_worker:/app/nlp_worker
+    healthcheck:
+      test: ["CMD", "celery", "-A", "config", "inspect", "ping", "--timeout", "5"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
   frontend:
     build:
       context: ./frontend
@@ -98,3 +126,4 @@ services:
 
 volumes:
   db_data:
+  qdrant_data:

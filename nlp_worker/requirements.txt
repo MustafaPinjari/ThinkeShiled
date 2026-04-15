@@ -1,0 +1,11 @@
+celery==5.3.6
+redis==5.0.3
+mysqlclient==2.2.4
+django==4.2.13
+djangorestframework==3.15.1
+python-dotenv==1.0.1
+sentence-transformers>=2.7
+qdrant-client>=1.9
+langdetect>=1.0.9
+nltk>=3.8
+numpy>=1.26

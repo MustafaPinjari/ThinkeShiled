@@ -76,6 +76,10 @@ class TenderCreateView(APIView):
                 {"tender_id": ["Duplicate tender_id."]},
             )
 
+        # Enqueue NLP spec analysis task
+        from celery import current_app
+        current_app.send_task("nlp_worker.analyze_spec_task", args=[tender.id])
+
         # Write audit log
         AuditLog.objects.create(
             event_type=EventType.TENDER_INGESTED,
@@ -167,6 +171,7 @@ class TenderCSVUploadView(APIView):
                 "submission_deadline": row.get("submission_deadline", "").strip(),
                 "buyer_id": row.get("buyer_id", "").strip(),
                 "buyer_name": row.get("buyer_name", "").strip(),
+                "spec_text": row.get("spec_text", "").strip(),
             }
             if row.get("status", "").strip():
                 data["status"] = row["status"].strip()
@@ -187,12 +192,22 @@ class TenderCSVUploadView(APIView):
             }))
 
         # Bulk create in batches of 1000
+        from celery import current_app
         created_count = 0
         batch_size = 1000
         for i in range(0, len(accepted_tenders), batch_size):
             batch = accepted_tenders[i: i + batch_size]
             Tender.objects.bulk_create(batch, ignore_conflicts=False)
             created_count += len(batch)
+
+            # Enqueue NLP analysis for tenders with spec_text
+            batch_tender_ids = [t.tender_id for t in batch if t.spec_text]
+            if batch_tender_ids:
+                created_with_spec = Tender.objects.filter(
+                    tender_id__in=batch_tender_ids
+                ).values_list("id", flat=True)
+                for pk in created_with_spec:
+                    current_app.send_task("nlp_worker.analyze_spec_task", args=[pk])
 
         return Response(
             {
@@ -538,6 +553,130 @@ class TenderScoreHistoryView(APIView):
             for s in page
         ]
         return paginator.get_paginated_response(data)
+
+
+# ---------------------------------------------------------------------------
+# Spec text update endpoint
+# ---------------------------------------------------------------------------
+
+class TenderSpecUpdateView(APIView):
+    """PATCH /api/v1/tenders/{id}/ — update spec_text (ADMIN only)."""
+
+    permission_classes = [IsAdminRole]
+
+    MAX_SPEC_LENGTH = 100_000
+
+    def patch(self, request, pk):
+        try:
+            tender = Tender.objects.get(pk=pk)
+        except Tender.DoesNotExist:
+            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if "spec_text" not in request.data:
+            return _validation_error_response(
+                "spec_text field is required.",
+                {"spec_text": ["This field is required."]},
+            )
+
+        spec_text = request.data["spec_text"]
+        if not isinstance(spec_text, str):
+            return _validation_error_response(
+                "spec_text must be a string.",
+                {"spec_text": ["Must be a string."]},
+            )
+
+        if len(spec_text) > self.MAX_SPEC_LENGTH:
+            return Response(
+                {
+                    "error": {
+                        "code": "VALIDATION_ERROR",
+                        "message": f"spec_text exceeds maximum length of {self.MAX_SPEC_LENGTH} characters.",
+                        "details": {"spec_text": [f"Ensure this field has no more than {self.MAX_SPEC_LENGTH} characters."]},
+                    }
+                },
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )
+
+        tender.spec_text = spec_text
+        tender.spec_language = ""  # will be re-detected by NLP worker
+        tender.save(update_fields=["spec_text", "spec_language", "updated_at"])
+
+        # Re-enqueue NLP analysis
+        from celery import current_app
+        current_app.send_task("nlp_worker.analyze_spec_task", args=[tender.id])
+
+        # Write audit log
+        AuditLog.objects.create(
+            event_type=EventType.SPEC_UPDATED,
+            user=request.user,
+            affected_entity_type="Tender",
+            affected_entity_id=tender.tender_id,
+            data_snapshot={
+                "tender_id": tender.tender_id,
+                "spec_text_length": len(spec_text),
+            },
+            ip_address=_get_client_ip(request),
+        )
+
+        return Response(
+            {"detail": "spec_text updated and NLP analysis enqueued."},
+            status=status.HTTP_200_OK,
+        )
+
+
+# ---------------------------------------------------------------------------
+# Mark fraud corpus endpoint
+# ---------------------------------------------------------------------------
+
+class TenderMarkFraudCorpusView(APIView):
+    """POST /api/v1/tenders/{id}/mark-fraud-corpus/ — mark tender as fraud corpus (ADMIN only)."""
+
+    permission_classes = [IsAdminRole]
+
+    def post(self, request, pk):
+        try:
+            tender = Tender.objects.get(pk=pk)
+        except Tender.DoesNotExist:
+            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        confirmed_fraud = request.data.get("confirmed_fraud")
+        if confirmed_fraud is None or not isinstance(confirmed_fraud, bool):
+            return _validation_error_response(
+                "confirmed_fraud field is required and must be a boolean.",
+                {"confirmed_fraud": ["This field is required and must be a boolean."]},
+            )
+
+        try:
+            from nlp_worker.vector_store import VectorStore
+            VectorStore().mark_fraud_corpus(tender_id=tender.id, confirmed_fraud=confirmed_fraud)
+        except Exception as exc:
+            # Check if it's a Qdrant connectivity error
+            exc_module = type(exc).__module__ or ""
+            exc_name = type(exc).__name__
+            if "qdrant" in exc_module.lower() or "QdrantException" in exc_name or "ConnectionError" in exc_name:
+                return Response(
+                    {"detail": "Vector store unavailable."},
+                    status=status.HTTP_503_SERVICE_UNAVAILABLE,
+                )
+            raise
+
+        AuditLog.objects.create(
+            event_type=EventType.STATUS_CHANGED,
+            user=request.user,
+            affected_entity_type="Tender",
+            affected_entity_id=tender.tender_id,
+            data_snapshot={
+                "action": "mark_fraud_corpus",
+                "tender_id": tender.tender_id,
+                "confirmed_fraud": confirmed_fraud,
+            },
+            ip_address=_get_client_ip(request),
+        )
+
+        return Response(
+            {"detail": "Tender marked as fraud corpus.", "confirmed_fraud": confirmed_fraud},
+            status=status.HTTP_200_OK,
+        )
 
 
 # ---------------------------------------------------------------------------

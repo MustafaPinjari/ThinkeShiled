@@ -90,9 +90,12 @@ def _expected_score(inputs: ScoringInputs, weights: ScoringWeights) -> int:
         + inputs.medium_flags * weights.medium_weight
     )
     flag_contribution = min(raw_flags, weights.red_flag_cap)
+    # Use the same 4-decimal rounding as _seed_ml_scores to match scorer precision
+    ml_anomaly = round(inputs.ml_anomaly, 4)
+    ml_collusion = round(inputs.ml_collusion, 4)
     ml_contribution = (
-        inputs.ml_anomaly * weights.ml_anomaly_weight
-        + inputs.ml_collusion * weights.ml_collusion_weight
+        ml_anomaly * weights.ml_anomaly_weight
+        + ml_collusion * weights.ml_collusion_weight
     )
     raw = flag_contribution + ml_contribution
     return max(0, min(100, int(round(raw))))

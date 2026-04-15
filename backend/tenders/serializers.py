@@ -32,6 +32,9 @@ class TenderSerializer(serializers.ModelSerializer):
         required=False,
     )
     publication_date = serializers.DateTimeField(required=False, allow_null=True)
+    spec_text = serializers.CharField(
+        max_length=100_000, required=False, allow_blank=True, default=""
+    )
 
     class Meta:
         model = Tender
@@ -47,6 +50,7 @@ class TenderSerializer(serializers.ModelSerializer):
             "buyer_name",
             "status",
             "publication_date",
+            "spec_text",
             "created_at",
             "updated_at",
         ]
@@ -57,6 +61,18 @@ class TenderSerializer(serializers.ModelSerializer):
         for field in _STRING_FIELDS:
             if field in attrs and attrs[field]:
                 attrs[field] = _sanitize(attrs[field])
+
+        # Sanitize and validate spec_text
+        spec_text = attrs.get("spec_text", "")
+        if spec_text:
+            spec_text = bleach.clean(spec_text, tags=[], attributes={}, strip=True)
+            if len(spec_text) > 100_000:
+                raise serializers.ValidationError(
+                    {"spec_text": "spec_text exceeds maximum length of 100,000 characters."},
+                    code="VALIDATION_ERROR",
+                )
+            attrs["spec_text"] = spec_text
+
         return attrs
 
     def validate_tender_id(self, value):

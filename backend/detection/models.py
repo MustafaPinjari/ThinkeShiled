@@ -9,6 +9,10 @@ class FlagType(models.TextChoices):
     SHORT_DEADLINE = "SHORT_DEADLINE", "Short Deadline"
     LINKED_ENTITIES = "LINKED_ENTITIES", "Linked Entities"
     COVER_BID_PATTERN = "COVER_BID_PATTERN", "Cover Bid Pattern"
+    SPEC_TAILORING = "SPEC_TAILORING", "Specification Tailoring"
+    SPEC_COPY_PASTE = "SPEC_COPY_PASTE", "Copy-Paste Fraud"
+    SPEC_VAGUE_SCOPE = "SPEC_VAGUE_SCOPE", "Vague Scope"
+    SPEC_UNUSUAL_RESTRICTION = "SPEC_UNUSUAL_RESTRICTION", "Unusual Restriction"
 
 
 class Severity(models.TextChoices):

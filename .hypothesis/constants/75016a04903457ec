@@ -1,0 +1,4 @@
+# file: C:\Users\pinja\OneDrive\Desktop\ThinkShield\nlp_worker\vector_store.py
+# hypothesis_version: 6.151.12
+
+[384, 'QDRANT_URL', 'confirmed_fraud', 'http://qdrant:6333', 'ingested_at', 'is_fraud_corpus', 'tender_id', 'tender_specs']

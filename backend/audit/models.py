@@ -23,6 +23,7 @@ class EventType(models.TextChoices):
     EXPORT_GENERATED = "EXPORT_GENERATED", "Audit Export Generated"
     RULE_ADDED = "RULE_ADDED", "Rule Definition Added"
     EXPLANATION_GENERATED = "EXPLANATION_GENERATED", "Explanation Generated"
+    SPEC_UPDATED = "SPEC_UPDATED", "Tender Spec Text Updated"
 
 
 class AuditLog(models.Model):

@@ -20,6 +20,8 @@ class Tender(models.Model):
     buyer_name = models.CharField(max_length=500)
     status = models.CharField(max_length=20, choices=TenderStatus.choices, default=TenderStatus.ACTIVE)
     publication_date = models.DateTimeField(null=True, blank=True)
+    spec_text = models.TextField(blank=True, default="")
+    spec_language = models.CharField(max_length=10, blank=True, default="")
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
