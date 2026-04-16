@@ -15,72 +15,90 @@ AI-powered procurement fraud detection platform. Ingests tender and bid data, ru
 - **Audit Log** — immutable, tamper-evident log of all system events with PDF export
 - **Role-based access** — ADMIN (full access) and AUDITOR (read-only)
 
+---
+
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Frontend | Next.js 16, Tailwind CSS, vis-network |
+| Frontend | Next.js 16, TypeScript, Tailwind CSS |
+| UI System | HeroUI v3 (layout/sidebar/tables), framer-motion (animations) |
+| Charts | Recharts via Chakra UI Charts |
 | Backend | Django 4.2, Django REST Framework, Gunicorn |
 | Auth | JWT RS256 via djangorestframework-simplejwt |
 | Database | MySQL 8 |
 | Cache / Broker | Redis 7 |
 | Task Queue | Celery |
 | ML | scikit-learn (Isolation Forest, Random Forest), SHAP, pandas |
-| Infrastructure | Docker, Docker Compose |
 
 ---
 
-## Quick Start
+## Quick Start (Local Development)
 
 ### Prerequisites
 
-- Docker 24+
-- Docker Compose v2
+- Python 3.11+
+- Node.js 20+
+- MySQL 8 running locally
+- Redis running locally (optional — only needed for ML/Celery tasks)
 
-### 1. Configure environment
+### 1. Clone and configure environment
 
 ```bash
 cp .env.example .env
 ```
 
-The `.env` file needs a Django secret key and RS256 JWT key pair. See [`docs/setup.md`](docs/setup.md) for generation instructions. For a quick local run the example values work as-is except for the JWT keys.
+Edit `.env` — the key values for local dev:
 
-### 2. Start the database
-
-```bash
-docker compose up -d db redis
+```env
+DB_HOST=127.0.0.1
+DB_PORT=3306
+REDIS_URL=redis://127.0.0.1:6379/0
+NEXT_PUBLIC_API_URL=http://localhost:8000
+DEBUG=True
 ```
 
-Wait until both show `(healthy)`:
+See [`docs/setup.md`](docs/setup.md) for JWT key generation instructions.
 
-```bash
-docker compose ps
+### 2. Set up the database
+
+Create the MySQL database and user:
+
+```sql
+CREATE DATABASE tendershield;
+CREATE USER 'tendershield'@'localhost' IDENTIFIED BY 'changeme_db';
+GRANT ALL PRIVILEGES ON tendershield.* TO 'tendershield'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
-### 3. Run migrations and create admin user
+### 3. Start the backend
 
 ```bash
-docker compose run --rm backend python manage.py migrate
-
-docker compose run --rm backend \
-  python manage.py create_superuser_admin \
-  --username admin \
-  --email admin@example.com \
-  --password "ChangeMe123!"
+cd backend
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py create_superuser_admin --username admin --email admin@example.com --password "ChangeMe123!"
+python manage.py runserver
 ```
 
-### 4. Start everything
+Backend runs at `http://localhost:8000`
+
+### 4. Start the frontend
 
 ```bash
-docker compose up -d
+cd frontend
+npm install
+npm run dev
 ```
+
+Frontend runs at `http://localhost:3000`
 
 ### 5. Open the app
 
 | Service | URL |
 |---|---|
 | Frontend | http://localhost:3000 |
-| Backend API | http://localhost:8000 |
+| Backend API | http://localhost:8000/api/v1/ |
 | Django Admin | http://localhost:8000/admin |
 | Health Check | http://localhost:8000/health |
 
@@ -90,37 +108,42 @@ docker compose up -d
 
 ---
 
-## Running & Stopping
+## Project Structure
 
-```bash
-# Start all services
-docker compose up -d
-
-# Stop all services
-docker compose down
-
-# Check status
-docker compose ps
-
-# View logs
-docker compose logs -f
+```
+├── backend/           # Django API (auth, tenders, bids, detection, scoring, alerts, audit)
+├── frontend/          # Next.js app (dashboard, tenders, companies, graph, alerts, audit)
+│   ├── app/           # Next.js App Router pages
+│   ├── components/
+│   │   ├── charts/    # Recharts-based data visualisation
+│   │   ├── tables/    # Tender and bid tables
+│   │   └── ui/        # Reusable UI components
+│   ├── contexts/      # Auth context
+│   ├── lib/           # Axios API client
+│   └── types/         # TypeScript interfaces
+├── ml_worker/         # Celery worker — ML training and inference
+├── docs/
+│   ├── setup.md       # Environment variables, JWT keys, migrations
+│   ├── deployment.md  # Production deployment guide
+│   └── USER_GUIDE.md  # Full feature and API documentation
+├── .env.example
+└── docker-compose.yml # Legacy — kept for reference, not required for local dev
 ```
 
 ---
 
-## Project Structure
+## Frontend Pages
 
-```
-├── backend/          # Django API (authentication, tenders, bids, detection, scoring, alerts, audit…)
-├── frontend/         # Next.js app (dashboard, tenders, companies, graph, alerts, audit)
-├── ml_worker/        # Celery worker — ML training and inference tasks
-├── docs/
-│   ├── setup.md      # Detailed setup and configuration guide
-│   ├── deployment.md # Production deployment guide
-│   └── USER_GUIDE.md # Full feature and API documentation
-├── docker-compose.yml
-└── .env.example
-```
+| Route | Description |
+|---|---|
+| `/dashboard` | KPI cards, fraud trend chart, risk distribution, tender feed |
+| `/tenders` | Full tender list with filters and risk score badges |
+| `/tenders/[id]` | Tender detail — score card, SHAP chart, red flags, bid table |
+| `/companies` | Company risk profiles table |
+| `/companies/[id]` | Company detail — metrics, tender timeline, red flags |
+| `/graph` | Interactive collusion network graph |
+| `/alerts` | Alert inbox with delivery status |
+| `/audit` | Audit log table with PDF export (Admin only) |
 
 ---
 
@@ -135,20 +158,22 @@ All endpoints require `Authorization: Bearer <token>` except login.
 | `POST /auth/login/` | Login — returns access + refresh tokens |
 | `POST /auth/logout/` | Blacklist token |
 | `POST /auth/refresh/` | Refresh access token |
-| `GET/POST /tenders/` | List or create tenders |
-| `POST /tenders/upload/` | CSV batch upload (10k+ rows) |
+| `GET /tenders/` | List tenders with fraud scores |
+| `GET /tenders/stats/` | Dashboard KPI stats |
 | `GET /tenders/{id}/score/` | Fraud risk score |
-| `GET /tenders/{id}/explanation/` | SHAP explanation |
-| `GET /tenders/{id}/red-flags/` | Active red flags |
-| `GET/POST /bids/` | List or create bids |
+| `GET /tenders/{id}/explanation/` | SHAP explanation + red flags |
+| `GET /bids/` | List bids |
 | `GET /companies/` | Company risk profiles |
-| `GET /graph/` | Collusion graph data |
+| `GET /companies/{id}/tenders/` | Company tender history |
+| `GET /companies/{id}/red-flags/` | Company red flags |
+| `GET /graph/` | Collusion graph nodes + edges |
 | `GET /graph/rings/` | Detected collusion rings |
 | `GET /alerts/` | Alert inbox |
+| `POST /alerts/{id}/read/` | Mark alert as read |
 | `GET /audit-log/` | Audit log (Admin only) |
 | `POST /audit-log/export/` | Queue PDF export |
 
-Full API reference: [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md#7-api-reference)
+Full API reference: [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md)
 
 ---
 
@@ -156,7 +181,7 @@ Full API reference: [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md#7-api-reference)
 
 | Role | Access |
 |---|---|
-| **ADMIN** | Full read-write — ingest data, manage rules, configure alerts, view audit log |
+| **ADMIN** | Full access — ingest data, manage rules, configure alerts, view audit log |
 | **AUDITOR** | Read-only — view tenders, scores, companies, graph, own alerts |
 
 ---
@@ -172,15 +197,13 @@ Full API reference: [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md#7-api-reference)
 | LINKED_ENTITIES | Bidders share address or director | HIGH |
 | COVER_BID_PATTERN | Bidder bids in 3+ tenders in 30 days with 0 wins | HIGH |
 
-Rules run automatically on bid ingestion. Admins can add new rules at runtime via `POST /api/v1/rules/`.
-
 ---
 
 ## Documentation
 
-- [`docs/setup.md`](docs/setup.md) — environment variables, JWT key generation, migrations, ML training
+- [`docs/setup.md`](docs/setup.md) — environment variables, JWT key generation, migrations
 - [`docs/deployment.md`](docs/deployment.md) — production deployment
-- [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) — full user guide, all features, complete API reference
+- [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) — full user guide and API reference
 
 ---
 

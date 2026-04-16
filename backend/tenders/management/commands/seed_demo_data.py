@@ -328,3 +328,32 @@ class Command(BaseCommand):
             f"{RedFlag.objects.count()} red flags, "
             f"{CompanyProfile.objects.count()} company profiles"
         ))
+
+    def seed_graph(self, b1, b2, b3, b4, b5, t1, t3, t4, t5, t6, t7, t8, now):
+        from datetime import timedelta
+        from graph.models import GraphNode, GraphEdge, EdgeType, CollusionRing
+
+        n1 = GraphNode.objects.create(bidder=b1, metadata={"fraud_score": 91, "risk_status": "HIGH_RISK"})
+        n2 = GraphNode.objects.create(bidder=b2, metadata={"fraud_score": 82, "risk_status": "HIGH_RISK"})
+        n3 = GraphNode.objects.create(bidder=b3, metadata={"fraud_score": 78, "risk_status": "MEDIUM"})
+        n4 = GraphNode.objects.create(bidder=b4, metadata={"fraud_score": 58, "risk_status": "MEDIUM"})
+        n5 = GraphNode.objects.create(bidder=b5, metadata={"fraud_score": 22, "risk_status": "LOW"})
+
+        GraphEdge.objects.create(source_node=n1, target_node=n2, edge_type=EdgeType.SHARED_ADDRESS, tender=None, metadata={"address": "Plot 47, Sector 18, Gurugram"})
+        GraphEdge.objects.create(source_node=n1, target_node=n2, edge_type=EdgeType.SHARED_DIRECTOR, tender=None, metadata={"director": "Rajesh Kumar Sharma"})
+        GraphEdge.objects.create(source_node=n1, target_node=n2, edge_type=EdgeType.CO_BID, tender=t1, metadata={})
+        GraphEdge.objects.create(source_node=n1, target_node=n2, edge_type=EdgeType.CO_BID, tender=t4, metadata={})
+        GraphEdge.objects.create(source_node=n1, target_node=n2, edge_type=EdgeType.CO_BID, tender=t8, metadata={})
+        GraphEdge.objects.create(source_node=n1, target_node=n5, edge_type=EdgeType.CO_BID, tender=t1, metadata={})
+        GraphEdge.objects.create(source_node=n1, target_node=n5, edge_type=EdgeType.CO_BID, tender=t6, metadata={})
+        GraphEdge.objects.create(source_node=n1, target_node=n5, edge_type=EdgeType.CO_BID, tender=t8, metadata={})
+        GraphEdge.objects.create(source_node=n3, target_node=n4, edge_type=EdgeType.CO_BID, tender=t3, metadata={})
+        GraphEdge.objects.create(source_node=n3, target_node=n4, edge_type=EdgeType.CO_BID, tender=t5, metadata={})
+        GraphEdge.objects.create(source_node=n3, target_node=n4, edge_type=EdgeType.CO_BID, tender=t7, metadata={})
+
+        CollusionRing.objects.create(ring_id="RING-2024-001", member_bidder_ids=[b1.id, b2.id], member_count=2, detected_at=now - timedelta(days=9), is_active=True)
+        CollusionRing.objects.create(ring_id="RING-2024-002", member_bidder_ids=[b1.id, b2.id, b5.id], member_count=3, detected_at=now - timedelta(days=5), is_active=True)
+
+        self.stdout.write(self.style.SUCCESS(
+            f"Graph: {GraphNode.objects.count()} nodes, {GraphEdge.objects.count()} edges, {CollusionRing.objects.count()} rings"
+        ))

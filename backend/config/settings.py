@@ -93,7 +93,7 @@ DATABASES = {
         "NAME": os.environ.get("DB_NAME", "tendershield"),
         "USER": os.environ.get("DB_USER", "tendershield"),
         "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-        "HOST": os.environ.get("DB_HOST", "db"),
+        "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
         "PORT": os.environ.get("DB_PORT", "3306"),
         "OPTIONS": {
             "charset": "utf8mb4",
@@ -103,16 +103,36 @@ DATABASES = {
 }
 
 # ---------------------------------------------------------------------------
-# Cache — Redis
+# Cache — LocMemCache for local dev (no Redis, no file permissions issues)
 # ---------------------------------------------------------------------------
-REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379/0")
+REDIS_URL = os.environ.get("REDIS_URL", "redis://127.0.0.1:6379/0")
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": REDIS_URL,
+def _redis_available(url: str) -> bool:
+    try:
+        import redis as _redis
+        client = _redis.from_url(url, socket_connect_timeout=1)
+        client.ping()
+        return True
+    except Exception:
+        return False
+
+if _redis_available(REDIS_URL):
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": REDIS_URL,
+        }
     }
-}
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "tendershield-dev",
+        }
+    }
+
+# Silence ratelimit system check errors when Redis is unavailable in dev
+SILENCED_SYSTEM_CHECKS = ["django_ratelimit.W001", "django_ratelimit.E003"]
 
 # ---------------------------------------------------------------------------
 # Celery
