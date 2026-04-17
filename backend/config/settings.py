@@ -268,6 +268,12 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "TenderShield Alerts <
 ALERT_DEFAULT_THRESHOLD = int(os.environ.get("ALERT_DEFAULT_THRESHOLD", "70"))
 
 # ---------------------------------------------------------------------------
+# data.gov.in OGD API (GeM / CPPP real tender data)
+# ---------------------------------------------------------------------------
+DATAGOV_API_KEY = os.environ.get("DATAGOV_API_KEY", "")
+DATAGOV_RESOURCE_ID = os.environ.get("DATAGOV_RESOURCE_ID", "")
+
+# ---------------------------------------------------------------------------
 # ML Worker settings
 # ---------------------------------------------------------------------------
 ML_RETRAIN_INTERVAL_HOURS = int(os.environ.get("ML_RETRAIN_INTERVAL_HOURS", "24"))
