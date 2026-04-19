@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django_ratelimit",
     # TenderShield apps
     "authentication",
+    "agencies",
     "tenders",
     "bids",
     "detection",
@@ -219,9 +220,13 @@ if _jwt_public_key:
 _access_lifetime_seconds = int(os.environ.get("JWT_ACCESS_TOKEN_LIFETIME", "3600"))
 _refresh_lifetime_seconds = int(os.environ.get("JWT_REFRESH_TOKEN_LIFETIME", "604800"))
 
+# Agency-specific JWT lifetimes (Requirement 9.8)
+_agency_access_lifetime_minutes = int(os.environ.get("AGENCY_JWT_ACCESS_LIFETIME", "15"))
+_agency_refresh_lifetime_hours = int(os.environ.get("AGENCY_JWT_REFRESH_LIFETIME", "24"))
+
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=_access_lifetime_seconds),
-    "REFRESH_TOKEN_LIFETIME": timedelta(seconds=_refresh_lifetime_seconds),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=_agency_access_lifetime_minutes),
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=_agency_refresh_lifetime_hours),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
     "ALGORITHM": "RS256",
