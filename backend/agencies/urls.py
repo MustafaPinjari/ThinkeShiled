@@ -8,6 +8,7 @@ Registered under api/v1/agencies/ in config/urls.py (task 9.2).
 from django.urls import path
 
 from agencies.views import (
+    AgencyLoginView,
     AgencyMemberDeactivateView,
     AgencyMemberListView,
     AgencyProfileView,
@@ -26,6 +27,7 @@ urlpatterns = [
     # --- Public: registration & email verification ---
     path("register/", AgencyRegisterView.as_view(), name="agency-register"),
     path("verify-email/", EmailVerificationView.as_view(), name="agency-verify-email"),
+    path("login/", AgencyLoginView.as_view(), name="agency-login"),
 
     # --- Invitations ---
     path("me/invitations/", InvitationCreateView.as_view(), name="agency-invitation-create"),

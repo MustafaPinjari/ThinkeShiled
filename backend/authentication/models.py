@@ -6,6 +6,11 @@ from django.utils import timezone
 class UserRole(models.TextChoices):
     AUDITOR = "AUDITOR", "Auditor"
     ADMIN = "ADMIN", "Administrator"
+    # Agency Portal RBAC roles (Requirement 3.1)
+    AGENCY_ADMIN = "AGENCY_ADMIN", "Agency Administrator"
+    AGENCY_OFFICER = "AGENCY_OFFICER", "Agency Officer"
+    REVIEWER = "REVIEWER", "Reviewer"
+    GOVERNMENT_AUDITOR = "GOVERNMENT_AUDITOR", "Government Auditor"
 
 
 class UserManager(BaseUserManager):
@@ -30,7 +35,21 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=10, choices=UserRole.choices, default=UserRole.AUDITOR)
+    role = models.CharField(
+        max_length=20,  # extended from 10 to accommodate new role names
+        choices=UserRole.choices,
+        default=UserRole.AUDITOR,
+    )
+    # Agency FK — null for internal users (AUDITOR, ADMIN)
+    # Populated for agency-scoped roles (AGENCY_ADMIN, AGENCY_OFFICER, REVIEWER, GOVERNMENT_AUDITOR)
+    agency = models.ForeignKey(
+        "agencies.Agency",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="members",
+    )
+    email_verified = models.BooleanField(default=False)
     failed_login_attempts = models.PositiveIntegerField(default=0)
     locked_until = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -58,3 +77,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def is_auditor(self):
         return self.role == UserRole.AUDITOR
+
+

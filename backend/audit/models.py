@@ -24,6 +24,16 @@ class EventType(models.TextChoices):
     RULE_ADDED = "RULE_ADDED", "Rule Definition Added"
     EXPLANATION_GENERATED = "EXPLANATION_GENERATED", "Explanation Generated"
     SPEC_UPDATED = "SPEC_UPDATED", "Tender Spec Text Updated"
+    # Agency Portal RBAC event types
+    AGENCY_REGISTERED = "AGENCY_REGISTERED", "Agency Registered"
+    AGENCY_STATUS_CHANGED = "AGENCY_STATUS_CHANGED", "Agency Status Changed"
+    INVITATION_CREATED = "INVITATION_CREATED", "Invitation Created"
+    INVITATION_ACCEPTED = "INVITATION_ACCEPTED", "Invitation Accepted"
+    MEMBER_DEACTIVATED = "MEMBER_DEACTIVATED", "Member Deactivated"
+    PERMISSION_DENIED = "PERMISSION_DENIED", "Permission Denied"
+    TENDER_SUBMITTED = "TENDER_SUBMITTED", "Tender Submitted"
+    TENDER_CLEARED = "TENDER_CLEARED", "Tender Cleared"
+    GOV_AUDITOR_ACCESS = "GOV_AUDITOR_ACCESS", "Government Auditor Access"
 
 
 class AuditLog(models.Model):

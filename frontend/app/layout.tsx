@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import { Providers } from "./providers";
+import EmotionRegistry from "@/lib/emotion-registry";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,9 +34,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col antialiased">
-        <Providers>{children}</Providers>
+      <body className="min-h-full flex flex-col antialiased" suppressHydrationWarning>
+        <EmotionRegistry>
+          <Providers>{children}</Providers>
+        </EmotionRegistry>
       </body>
     </html>
   );

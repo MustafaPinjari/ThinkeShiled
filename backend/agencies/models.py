@@ -87,6 +87,8 @@ class EmailVerificationToken(models.Model):
     token_hash = models.CharField(max_length=64, unique=True)
     expires_at = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
+    # Set to True when all email delivery retries have been exhausted (Requirement 1.8)
+    delivery_failed = models.BooleanField(default=False)
 
     class Meta:
         db_table = "agencies_emailverificationtoken"

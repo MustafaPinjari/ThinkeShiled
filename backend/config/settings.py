@@ -186,7 +186,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ---------------------------------------------------------------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "authentication.jwt_auth.AuditingJWTAuthentication",
+        "agencies.jwt_auth.AgencyAwareJWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
@@ -196,7 +196,7 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
     ),
-    "EXCEPTION_HANDLER": "config.exceptions.custom_exception_handler",
+    "EXCEPTION_HANDLER": "agencies.exceptions.agency_exception_handler",
     "DEFAULT_THROTTLE_CLASSES": (
         "authentication.throttles.AuthenticatedUserThrottle",
     ),
