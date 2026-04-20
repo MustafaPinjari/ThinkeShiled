@@ -15,6 +15,8 @@ class AlertType(models.TextChoices):
     HIGH_RISK_SCORE = "HIGH_RISK_SCORE", "High Risk Score"
     COLLUSION_RING = "COLLUSION_RING", "Collusion Ring Detected"
     RED_FLAG = "RED_FLAG", "Red Flag Raised"
+    SCORING_FAILURE = "SCORING_FAILURE", "Scoring Failure"
+    TENDER_FLAGGED = "TENDER_FLAGGED", "Tender Flagged"
 
 
 class Alert(models.Model):

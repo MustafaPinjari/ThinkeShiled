@@ -26,7 +26,14 @@ class AgencyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token["role"] = user.role
-        token["agency_id"] = str(user.agency_id) if user.agency_id else None
+        # Use the UUID agency_id (agency.agency_id), not the integer FK (agency_id)
+        if user.agency_id:
+            try:
+                token["agency_id"] = str(user.agency.agency_id)
+            except Exception:
+                token["agency_id"] = str(user.agency_id)
+        else:
+            token["agency_id"] = None
         return token
 
     def validate(self, attrs):

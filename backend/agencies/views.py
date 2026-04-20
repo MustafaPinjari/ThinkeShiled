@@ -370,24 +370,29 @@ class AgencyLoginView(APIView):
 
         if user is not None:
             # Successful login — reset counters
-            user.failed_login_attempts = 0
-            user.locked_until = None
-            user.save(update_fields=["failed_login_attempts", "locked_until"])
+            # Use user_obj (fetched with select_related("agency")) to access the UUID
+            user_obj.failed_login_attempts = 0
+            user_obj.locked_until = None
+            user_obj.save(update_fields=["failed_login_attempts", "locked_until"])
 
             # Issue JWT tokens using AgencyTokenObtainPairSerializer
             from .serializers import AgencyTokenObtainPairSerializer  # noqa: PLC0415
-            refresh = AgencyTokenObtainPairSerializer.get_token(user)
+            refresh = AgencyTokenObtainPairSerializer.get_token(user_obj)
             access = refresh.access_token
+
+            # Use the UUID agency_id (agency.agency_id) for the response
+            agency_uuid = str(user_obj.agency.agency_id) if user_obj.agency else None
 
             AuditLog.objects.create(
                 event_type=EventType.USER_LOGIN,
-                user=user,
+                user=user_obj,
                 affected_entity_type="User",
-                affected_entity_id=str(user.pk),
+                affected_entity_id=str(user_obj.pk),
                 data_snapshot={
-                    "email": user.email,
-                    "agency_id": str(user.agency_id) if user.agency_id else None,
-                    "role": user.role,
+                    "email": user_obj.email,
+                    # Keep integer PK for audit log to match existing test expectations
+                    "agency_id": str(user_obj.agency_id) if user_obj.agency_id else None,
+                    "role": user_obj.role,
                 },
                 ip_address=ip or None,
             )
@@ -397,8 +402,9 @@ class AgencyLoginView(APIView):
                     "access": str(access),
                     "refresh": str(refresh),
                     "expires_in": int(access.lifetime.total_seconds()),
-                    "role": user.role,
-                    "agency_id": str(user.agency_id) if user.agency_id else None,
+                    "role": user_obj.role,
+                    # Return UUID in the response (this is what the JWT contains)
+                    "agency_id": agency_uuid,
                 },
                 status=status.HTTP_200_OK,
             )
@@ -1008,20 +1014,25 @@ def _fraud_score_data(submission):
     """
     Return fraud score and risk badge data for a TenderSubmission.
     Reads from the linked Tender's FraudRiskScore if available.
+
+    FraudRiskScore has a FK to Tender (related_name="fraud_risk_scores"),
+    so we fetch the most recent score via the reverse manager.
     """
     score = None
     risk_badge = None
 
     if submission.tender_id is not None:
         try:
-            frs = submission.tender.fraudriskscore
-            score = float(frs.score)
-            if score < 40:
-                risk_badge = "green"
-            elif score < 70:
-                risk_badge = "amber"
-            else:
-                risk_badge = "red"
+            # FraudRiskScore is a FK (not OneToOne), ordered by -computed_at
+            frs = submission.tender.fraud_risk_scores.first()
+            if frs is not None:
+                score = float(frs.score)
+                if score < 40:
+                    risk_badge = "green"
+                elif score < 70:
+                    risk_badge = "amber"
+                else:
+                    risk_badge = "red"
         except Exception:
             pass
 
@@ -1114,7 +1125,7 @@ class AgencyTenderListView(APIView):
             )
 
         qs = TenderSubmission.objects.for_agency(agency_id).select_related(
-            "agency", "tender__fraudriskscore"
+            "agency", "tender"
         )
 
         # --- Filters ---
@@ -1326,7 +1337,7 @@ class AgencyTenderDetailView(APIView):
 
         try:
             submission = TenderSubmission.objects.select_related(
-                "agency", "tender__fraudriskscore"
+                "agency", "tender"
             ).get(pk=pk)
         except TenderSubmission.DoesNotExist:
             return None, Response(
@@ -1356,7 +1367,7 @@ class AgencyTenderDetailView(APIView):
         if submission.tender_id is not None:
             try:
                 flags = submission.tender.red_flags.values(
-                    "rule_name", "severity", "description"
+                    "flag_type", "severity", "trigger_data"
                 )
                 red_flags = list(flags)
             except Exception:
@@ -1637,7 +1648,7 @@ class CrossAgencyTenderListView(APIView):
 
     def get(self, request):
         qs = TenderSubmission.objects.select_related(
-            "agency", "tender__fraudriskscore"
+            "agency", "tender"
         ).order_by("-created_at")
 
         # Support the same filters as the agency-scoped list
