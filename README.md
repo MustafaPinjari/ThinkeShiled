@@ -102,12 +102,14 @@ Frontend runs at `http://localhost:3000`
 | Django Admin | http://localhost:8000/admin |
 | Health Check | http://localhost:8000/health |
 
+```bash
 **Default credentials admin:** `admin` / `ChangeMe123!`
 **Default credentials auditor:** `auditor` / `Auditor@123`
 **Default credentials agency_admin:** `bobibi5620_3` / `AgencyAdmin@123`
 **Default credentials agency_officer:** `agency_officer` / `Officer@123`
 **Default credentials reviewer:** `reviewer` / `Reviewer@123`
 **Default credentials government_audiror:** `gov_auditor` / `GovAudit@123`
+```
 
 > Change the password after first login.
 
