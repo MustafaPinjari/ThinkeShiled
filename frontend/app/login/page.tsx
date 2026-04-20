@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { login, isAuthenticated, isLoading, role } = useAuth();
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,16 +14,22 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  const agencyRoles = ["AGENCY_ADMIN", "AGENCY_OFFICER", "REVIEWER", "GOVERNMENT_AUDITOR"];
+
   useEffect(() => {
-    if (!isLoading && isAuthenticated) router.replace("/dashboard");
-  }, [isAuthenticated, isLoading, router]);
+    if (!isLoading && isAuthenticated) {
+      router.replace(agencyRoles.includes(role ?? "") ? "/agency/dashboard" : "/dashboard");
+    }
+  }, [isAuthenticated, isLoading, router, role]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null); setSubmitting(true);
     try {
       await login(username, password);
-      router.replace("/dashboard");
+      // role is updated in state after login — read from localStorage directly for immediate redirect
+      const newRole = localStorage.getItem("user_role") ?? "";
+      router.replace(agencyRoles.includes(newRole) ? "/agency/dashboard" : "/dashboard");
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       if (status === 401) setError("Invalid username or password.");

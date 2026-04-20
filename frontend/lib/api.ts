@@ -53,7 +53,7 @@ api.interceptors.response.use(
         failedQueue.push({ resolve, reject });
       })
         .then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
+          originalRequest.headers.set("Authorization", `Bearer ${token}`);
           return api(originalRequest);
         })
         .catch((err) => Promise.reject(err));
@@ -87,7 +87,7 @@ api.interceptors.response.use(
       localStorage.setItem("access_token", newAccessToken);
 
       api.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+      originalRequest.headers.set("Authorization", `Bearer ${newAccessToken}`);
 
       processQueue(null, newAccessToken);
       return api(originalRequest);

@@ -57,13 +57,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = useCallback(async (username: string, password: string) => {
-    const { data } = await api.post<{
+    type LoginResponse = {
       access: string;
       refresh: string;
       expires_in: number;
       role: UserRole;
       agency_id: string | null;
-    }>("/agencies/login/", { username, password });
+    };
+
+    let data: LoginResponse;
+
+    // Try the internal auth endpoint first (ADMIN / AUDITOR users).
+    // Fall back to the agency login endpoint for agency-scoped roles.
+    try {
+      const res = await api.post<LoginResponse>("/auth/login/", { username, password });
+      // /auth/login/ doesn't return agency_id — normalise it
+      data = { agency_id: null, ...res.data };
+    } catch (firstErr: unknown) {
+      const status = (firstErr as { response?: { status?: number } })?.response?.status;
+      // Only fall back on 401 (wrong endpoint for this user type), not on 400/403/429
+      if (status !== 401) throw firstErr;
+      const res = await api.post<LoginResponse>("/agencies/login/", { username, password });
+      data = res.data;
+    }
 
     localStorage.setItem("access_token", data.access);
     localStorage.setItem("refresh_token", data.refresh);

@@ -32,6 +32,7 @@ from decimal import Decimal, InvalidOperation
 
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
+from django.conf import settings
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
@@ -184,13 +185,36 @@ class AgencyRegisterView(APIView):
         )
 
         # --- Enqueue verification email ---
+        # Try Celery first; fall back to synchronous send if broker is unavailable
         try:
             from agencies.tasks import send_verification_email  # noqa: PLC0415
             send_verification_email.delay(user.pk, token_hex, agency.legal_name)
         except Exception as exc:
             logger.warning(
-                "Failed to enqueue send_verification_email for user %d: %s", user.pk, exc
+                "Celery unavailable, sending verification email synchronously for user %d: %s",
+                user.pk, exc
             )
+            try:
+                from django.core.mail import send_mail  # noqa: PLC0415
+                frontend_origin = getattr(settings, "FRONTEND_ORIGIN", "http://localhost:3000")
+                verification_url = f"{frontend_origin}/agency/verify-email?token={token_hex}"
+                send_mail(
+                    subject="[TenderShield] Verify your agency email address",
+                    message=(
+                        f"Welcome to TenderShield!\n\n"
+                        f"Please verify your email address by clicking the link below:\n\n"
+                        f"  {verification_url}\n\n"
+                        f"This link expires in 24 hours.\n\n"
+                        f"— The TenderShield Team\n"
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=True,
+                )
+            except Exception as mail_exc:
+                logger.warning(
+                    "Synchronous email send also failed for user %d: %s", user.pk, mail_exc
+                )
 
         # --- Write AuditLog ---
         AuditLog.objects.create(
@@ -775,9 +799,10 @@ class AgencyMemberListView(APIView):
         data = [
             {
                 "id": member.pk,
-                "name": member.username,
+                "username": member.username,
                 "email": member.email,
                 "role": member.role,
+                "is_active": member.is_active,
                 "last_login": member.last_login.isoformat() if member.last_login else None,
             }
             for member in members
@@ -1230,10 +1255,13 @@ class AgencyTenderListView(APIView):
 
         # --- submission_deadline: must be in the future ---
         from django.utils.dateparse import parse_datetime  # noqa: PLC0415
+        from django.utils.timezone import make_aware, is_naive  # noqa: PLC0415
         try:
             submission_deadline = parse_datetime(str(data["submission_deadline"]))
             if submission_deadline is None:
                 raise ValueError("unparseable")
+            if is_naive(submission_deadline):
+                submission_deadline = make_aware(submission_deadline)
         except (ValueError, TypeError):
             return Response(
                 {"detail": "submission_deadline must be a valid ISO 8601 datetime."},
@@ -1249,7 +1277,10 @@ class AgencyTenderListView(APIView):
         publication_date = None
         if data.get("publication_date"):
             from django.utils.dateparse import parse_datetime as _pd  # noqa: PLC0415
+            from django.utils.timezone import make_aware as _ma, is_naive as _in  # noqa: PLC0415
             publication_date = _pd(str(data["publication_date"]))
+            if publication_date is not None and _in(publication_date):
+                publication_date = _ma(publication_date)
 
         # --- Sanitise text inputs (Requirement 6.11) ---
         title = bleach_clean(str(data["title"]).strip())
@@ -1443,12 +1474,15 @@ class AgencyTenderDetailView(APIView):
 
             elif field == "submission_deadline":
                 from django.utils.dateparse import parse_datetime  # noqa: PLC0415
+                from django.utils.timezone import make_aware, is_naive  # noqa: PLC0415
                 parsed = parse_datetime(str(value))
                 if parsed is None:
                     return Response(
                         {"detail": "submission_deadline must be a valid ISO 8601 datetime."},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
+                if is_naive(parsed):
+                    parsed = make_aware(parsed)
                 if parsed <= timezone.now():
                     return Response(
                         {"detail": "Submission deadline must be in the future."},
@@ -1459,7 +1493,11 @@ class AgencyTenderDetailView(APIView):
             elif field == "publication_date":
                 if value:
                     from django.utils.dateparse import parse_datetime as _pd  # noqa: PLC0415
-                    updates[field] = _pd(str(value))
+                    from django.utils.timezone import make_aware as _ma, is_naive as _in  # noqa: PLC0415
+                    pd_val = _pd(str(value))
+                    if pd_val is not None and _in(pd_val):
+                        pd_val = _ma(pd_val)
+                    updates[field] = pd_val
                 else:
                     updates[field] = None
 
