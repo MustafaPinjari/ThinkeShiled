@@ -95,7 +95,7 @@ export default function RedFlagList({ redFlags, loading = false }: RedFlagListPr
       </div>
 
       {loading ? (
-        <div className="space-y-2">
+        <div className="space-y-2 animate-pulse">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="skeleton h-16 rounded-xl" />
           ))}

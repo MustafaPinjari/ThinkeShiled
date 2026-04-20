@@ -222,7 +222,7 @@ export default function SHAPChart({ explanation }: SHAPChartProps) {
         </div>
       ) : factors.length === 0 ? (
         <div style={{ height: "8rem", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.875rem", color: "var(--text-muted)" }}>
-          No SHAP factors — ML scores may be null (fewer than 3 bids).
+          No SHAP factors available — ML scores may be null (fewer than 3 bids).
         </div>
       ) : (
         <div ref={containerRef} className="w-full overflow-x-auto">

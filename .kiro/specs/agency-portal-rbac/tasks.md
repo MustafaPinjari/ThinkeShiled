@@ -84,7 +84,7 @@ Implement multi-tenancy at the agency level, a four-role RBAC model, a public la
   - [x] 5.2 Implement `PATCH /api/v1/agencies/me/` view (AGENCY_ADMIN only): allow updating `contact_name`, `contact_email`, `ministry`; reject GSTIN updates with HTTP 400; write `AGENCY_STATUS_CHANGED` AuditLog entry with field diffs (previous and new values for each changed field)
     - _Requirements: 11.1, 11.2, 11.3_
 
-- [x] 6. Backend: Tender Submission API
+- [-] 6. Backend: Tender Submission API
   - [x] 6.1 Implement `GET /api/v1/agencies/me/tenders/` view (all agency roles): return paginated `TenderSubmission` list scoped to user's agency via `AgencyScopedManager.for_agency()`; support filters: `status`, `category`, `date_range`; support sort: `created_at` (default desc), `estimated_value`, `fraud_risk_score`; include fraud score and risk badge data in response
     - _Requirements: 5.1, 5.3, 5.6, 5.7, 8.2_
   - [x] 6.2 Implement `POST /api/v1/agencies/me/tenders/` view (AGENCY_ADMIN, AGENCY_OFFICER): validate all required fields present, validate `estimated_value` is positive decimal with ≤ 2 decimal places, validate `submission_deadline` is in the future, sanitise `title`/`spec_text`/`buyer_name` with `bleach_clean()`, create `TenderSubmission` with status `DRAFT` linked to user's agency, write `TENDER_SUBMITTED` AuditLog entry
@@ -162,102 +162,102 @@ Implement multi-tenancy at the agency level, a four-role RBAC model, a public la
   - [x] 10.14 Write integration tests for Government Auditor cross-agency read and write-block behaviour
     - _Requirements: 12.1, 12.2, 12.3, 12.4_
 
-- [-] 11. Backend: Checkpoint — Ensure all backend tests pass
+- [x] 11. Backend: Checkpoint — Ensure all backend tests pass
   - Run `pytest backend/agencies/tests/` and confirm all property-based and unit tests pass; ask the user if questions arise.
 
-- [ ] 12. Frontend: Auth Context and API Client Extension
-  - [~] 12.1 Extend `UserRole` type in `AuthContext.tsx` to include `AGENCY_ADMIN`, `AGENCY_OFFICER`, `REVIEWER`, `GOVERNMENT_AUDITOR`
+- [x] 12. Frontend: Auth Context and API Client Extension
+  - [x] 12.1 Extend `UserRole` type in `AuthContext.tsx` to include `AGENCY_ADMIN`, `AGENCY_OFFICER`, `REVIEWER`, `GOVERNMENT_AUDITOR`
     - _Requirements: 3.1_
-  - [~] 12.2 Add `agencyId: string | null` to `AuthState` interface; persist and rehydrate from `localStorage`
+  - [x] 12.2 Add `agencyId: string | null` to `AuthState` interface; persist and rehydrate from `localStorage`
     - _Requirements: 9.2_
-  - [~] 12.3 Update `login()` in `AuthContext.tsx` to extract and store `agency_id` and `role` from JWT response payload
+  - [x] 12.3 Update `login()` in `AuthContext.tsx` to extract and store `agency_id` and `role` from JWT response payload
     - _Requirements: 9.2, 9.3_
-  - [~] 12.4 Create `frontend/services/agencies.ts` with typed API functions for all agency endpoints (register, verify-email, invitations, profile, members, tenders, cross-agency tenders)
+  - [x] 12.4 Create `frontend/services/agencies.ts` with typed API functions for all agency endpoints (register, verify-email, invitations, profile, members, tenders, cross-agency tenders)
     - _Requirements: all frontend-facing API endpoints_
 
-- [ ] 13. Frontend: Public Landing Page
-  - [~] 13.1 Replace `frontend/app/page.tsx` redirect with a full `LandingPage` component
+- [x] 13. Frontend: Public Landing Page
+  - [x] 13.1 Replace `frontend/app/page.tsx` redirect with a full `LandingPage` component
     - _Requirements: 1.1_
-  - [~] 13.2 Implement `LandingPage` with TenderShield value propositions (fraud detection, rule engine, ML scoring, audit trail) and a prominent CTA button navigating to `/agency/register`
+  - [x] 13.2 Implement `LandingPage` with TenderShield value propositions (fraud detection, rule engine, ML scoring, audit trail) and a prominent CTA button navigating to `/agency/register`
     - _Requirements: 1.2, 1.3_
-  - [~] 13.3 Ensure landing page is responsive down to 320px viewport width
+  - [x] 13.3 Ensure landing page is responsive down to 320px viewport width
     - _Requirements: 1.10_
 
-- [ ] 14. Frontend: Agency Registration and Onboarding
-  - [~] 14.1 Create `frontend/app/agency/register/page.tsx` with `AgencyRegistrationForm` collecting: legal name, GSTIN, ministry, contact name, official email, password
+- [x] 14. Frontend: Agency Registration and Onboarding
+  - [x] 14.1 Create `frontend/app/agency/register/page.tsx` with `AgencyRegistrationForm` collecting: legal name, GSTIN, ministry, contact name, official email, password
     - _Requirements: 1.4_
-  - [~] 14.2 Implement client-side GSTIN format validation in the registration form
+  - [x] 14.2 Implement client-side GSTIN format validation in the registration form
     - _Requirements: 1.4, 2.7_
-  - [~] 14.3 Display field-level validation errors for missing required fields
+  - [x] 14.3 Display field-level validation errors for missing required fields
     - _Requirements: 1.7_
-  - [~] 14.4 Display server-side errors for duplicate GSTIN and duplicate email
+  - [x] 14.4 Display server-side errors for duplicate GSTIN and duplicate email
     - _Requirements: 1.5, 1.6_
-  - [~] 14.5 Create `frontend/app/agency/verify-email/page.tsx` that reads the token from the URL query param and calls the verification endpoint; show success/error state
+  - [x] 14.5 Create `frontend/app/agency/verify-email/page.tsx` that reads the token from the URL query param and calls the verification endpoint; show success/error state
     - _Requirements: 1.9_
-  - [~] 14.6 Create `frontend/app/agency/invite/[token]/page.tsx` for invitation acceptance with pre-filled email and role display; show 410 error for expired/consumed tokens
+  - [x] 14.6 Create `frontend/app/agency/invite/[token]/page.tsx` for invitation acceptance with pre-filled email and role display; show 410 error for expired/consumed tokens
     - _Requirements: 4.3, 4.5_
 
-- [ ] 15. Frontend: Agency Dashboard
-  - [~] 15.1 Create `frontend/app/agency/dashboard/page.tsx` with route guard (redirect to `/login` if not authenticated with an agency role)
+- [x] 15. Frontend: Agency Dashboard
+  - [x] 15.1 Create `frontend/app/agency/dashboard/page.tsx` with route guard (redirect to `/login` if not authenticated with an agency role)
     - _Requirements: 5.1_
-  - [~] 15.2 Implement KPI cards: total submissions, high-risk count (score ≥ 70), active alerts count, under-review count
+  - [x] 15.2 Implement KPI cards: total submissions, high-risk count (score ≥ 70), active alerts count, under-review count
     - _Requirements: 5.2_
-  - [~] 15.3 Implement paginated tender list with columns: tender ID, title, category, estimated value (INR), status, fraud risk score, submission date
+  - [x] 15.3 Implement paginated tender list with columns: tender ID, title, category, estimated value (INR), status, fraud risk score, submission date
     - _Requirements: 5.3_
-  - [~] 15.4 Create `RiskBadge` component: green for score < 40, amber for 40–69, red for ≥ 70
+  - [x] 15.4 Create `RiskBadge` component: green for score < 40, amber for 40–69, red for ≥ 70
     - _Requirements: 5.4_
-  - [~] 15.5 Implement filter controls: status dropdown, category dropdown, date range picker
+  - [x] 15.5 Implement filter controls: status dropdown, category dropdown, date range picker
     - _Requirements: 5.6_
-  - [~] 15.6 Implement sort controls: submission date (default descending), estimated value, fraud risk score
+  - [x] 15.6 Implement sort controls: submission date (default descending), estimated value, fraud risk score
     - _Requirements: 5.7_
-  - [~] 15.7 Hide "Create Tender" action button for `REVIEWER` role
+  - [x] 15.7 Hide "Create Tender" action button for `REVIEWER` role
     - _Requirements: 5.8_
-  - [~] 15.8 Implement alert notification display for Agency_Admin and Agency_Officer users: poll the alerts endpoint every 30 seconds and show new alerts within 60 seconds of them being raised
+  - [x] 15.8 Implement alert notification display for Agency_Admin and Agency_Officer users: poll the alerts endpoint every 30 seconds and show new alerts within 60 seconds of them being raised
     - _Requirements: 5.5_
 
-- [ ] 16. Frontend: Tender Submission Form
-  - [~] 16.1 Create `frontend/app/agency/tenders/new/page.tsx` with `TenderSubmissionForm`
+- [x] 16. Frontend: Tender Submission Form
+  - [x] 16.1 Create `frontend/app/agency/tenders/new/page.tsx` with `TenderSubmissionForm`
     - _Requirements: 6.1_
-  - [~] 16.2 Implement all form fields: tender reference number, title, category (predefined GeM/CPPP list), estimated value (INR), submission deadline, publication date, buyer department name, spec text (up to 100,000 characters with character counter)
+  - [x] 16.2 Implement all form fields: tender reference number, title, category (predefined GeM/CPPP list), estimated value (INR), submission deadline, publication date, buyer department name, spec text (up to 100,000 characters with character counter)
     - _Requirements: 6.1_
-  - [~] 16.3 Implement client-side validation: required fields present, estimated value is positive decimal, submission deadline is in the future
+  - [x] 16.3 Implement client-side validation: required fields present, estimated value is positive decimal, submission deadline is in the future
     - _Requirements: 6.3, 6.4_
-  - [~] 16.4 Implement "Save as Draft" and "Submit" actions; show loading state during submission
+  - [x] 16.4 Implement "Save as Draft" and "Submit" actions; show loading state during submission
     - _Requirements: 6.2, 6.5_
-  - [~] 16.5 Create `frontend/app/agency/tenders/[id]/page.tsx` for tender detail view: display fraud score, `RiskBadge`, red flag summary, and current status
+  - [x] 16.5 Create `frontend/app/agency/tenders/[id]/page.tsx` for tender detail view: display fraud score, `RiskBadge`, red flag summary, and current status
     - _Requirements: 5.3, 5.4_
 
-- [ ] 17. Frontend: Agency Profile Management
-  - [~] 17.1 Create `frontend/app/agency/profile/page.tsx` with agency profile view showing all profile fields and current status
+- [x] 17. Frontend: Agency Profile Management
+  - [x] 17.1 Create `frontend/app/agency/profile/page.tsx` with agency profile view showing all profile fields and current status
     - _Requirements: 11.1, 11.5_
-  - [~] 17.2 Implement editable fields for Agency_Admin: contact name, contact email, ministry; show save confirmation on success
+  - [x] 17.2 Implement editable fields for Agency_Admin: contact name, contact email, ministry; show save confirmation on success
     - _Requirements: 11.1_
-  - [~] 17.3 Display GSTIN as read-only with a tooltip explaining it cannot be changed after registration
+  - [x] 17.3 Display GSTIN as read-only with a tooltip explaining it cannot be changed after registration
     - _Requirements: 11.2_
-  - [~] 17.4 Display agency status with a prominent suspension banner (including support contact email) when status is `SUSPENDED`
+  - [x] 17.4 Display agency status with a prominent suspension banner (including support contact email) when status is `SUSPENDED`
     - _Requirements: 11.6_
-  - [~] 17.5 Implement member list table with columns: name, email, role, last login; include "Deactivate" action button for Agency_Admin (hidden for other roles)
+  - [x] 17.5 Implement member list table with columns: name, email, role, last login; include "Deactivate" action button for Agency_Admin (hidden for other roles)
     - _Requirements: 11.4_
-  - [~] 17.6 Implement `InviteMemberModal` for Agency_Admin: email input, role selector (AGENCY_OFFICER or REVIEWER only), submit sends invitation
+  - [x] 17.6 Implement `InviteMemberModal` for Agency_Admin: email input, role selector (AGENCY_OFFICER or REVIEWER only), submit sends invitation
     - _Requirements: 4.1, 4.6_
 
-- [ ] 18. Frontend: Government Auditor Cross-Agency View
-  - [~] 18.1 Create `frontend/app/agency/tenders/page.tsx` for GOVERNMENT_AUDITOR cross-agency tender list: reuse the dashboard tender list component with an additional `Agency Name` / `Agency ID` column
+- [x] 18. Frontend: Government Auditor Cross-Agency View
+  - [x] 18.1 Create `frontend/app/agency/tenders/page.tsx` for GOVERNMENT_AUDITOR cross-agency tender list: reuse the dashboard tender list component with an additional `Agency Name` / `Agency ID` column
     - _Requirements: 12.1, 12.5_
-  - [~] 18.2 Ensure all write actions (create, edit, delete, submit, clear) are hidden or disabled for `GOVERNMENT_AUDITOR` role; SHAP explanation link must not be rendered
+  - [x] 18.2 Ensure all write actions (create, edit, delete, submit, clear) are hidden or disabled for `GOVERNMENT_AUDITOR` role; SHAP explanation link must not be rendered
     - _Requirements: 12.2, 12.4_
 
-- [ ] 19. Frontend: Tests
-  - [~] 19.1 Write Jest unit tests for `RiskBadge` component: verify correct colour class for scores < 40, 40–69, ≥ 70
+- [x] 19. Frontend: Tests
+  - [x] 19.1 Write Jest unit tests for `RiskBadge` component: verify correct colour class for scores < 40, 40–69, ≥ 70
     - _Requirements: 5.4_
-  - [~] 19.2 Write Jest unit tests for `AgencyRegistrationForm`: verify field-level errors for missing required fields and duplicate GSTIN/email server errors
+  - [x] 19.2 Write Jest unit tests for `AgencyRegistrationForm`: verify field-level errors for missing required fields and duplicate GSTIN/email server errors
     - _Requirements: 1.5, 1.6, 1.7_
-  - [~] 19.3 Write Jest unit tests for `TenderSubmissionForm`: verify past deadline rejection and character limit enforcement on spec text
+  - [x] 19.3 Write Jest unit tests for `TenderSubmissionForm`: verify past deadline rejection and character limit enforcement on spec text
     - _Requirements: 6.3, 6.4_
-  - [~] 19.4 Write Jest unit tests for `AgencyDashboard` filter and sort logic
+  - [x] 19.4 Write Jest unit tests for `AgencyDashboard` filter and sort logic
     - _Requirements: 5.6, 5.7_
 
-- [~] 20. Final Checkpoint — Ensure all tests pass
+- [x] 20. Final Checkpoint — Ensure all tests pass
   - Run full test suite (`pytest backend/` and `jest frontend/`); confirm all property-based, unit, and integration tests pass; ask the user if questions arise.
 
 ## Notes

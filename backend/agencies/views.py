@@ -100,15 +100,11 @@ class AgencyRegisterView(APIView):
         data = request.data
 
         # --- Required field validation ---
-        required_fields = [
-            "legal_name",
-            "gstin",
-            "ministry",
-            "contact_name",
-            "contact_email",
-            "password",
-        ]
-        missing = [f for f in required_fields if not data.get(f, "").strip()]
+        # Note: password is checked for non-empty but NOT stripped (spaces are valid in passwords)
+        required_fields_strip = ["legal_name", "gstin", "ministry", "contact_name", "contact_email"]
+        missing = [f for f in required_fields_strip if not str(data.get(f) or "").strip()]
+        if not str(data.get("password") or ""):
+            missing.append("password")
         if missing:
             return Response(
                 {"detail": "Missing required fields.", "missing_fields": missing},
@@ -120,7 +116,14 @@ class AgencyRegisterView(APIView):
         ministry = data["ministry"].strip()
         contact_name = data["contact_name"].strip()
         contact_email = data["contact_email"].strip().lower()
-        password = data["password"]
+        password = str(data["password"])
+
+        # --- Password minimum length ---
+        if len(password) < 8:
+            return Response(
+                {"detail": "Password must be at least 8 characters."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         # --- GSTIN format validation (Requirement 2.7) ---
         try:
@@ -325,25 +328,35 @@ class AgencyLoginView(APIView):
     authentication_classes = []
 
     def post(self, request):
-        email = request.data.get("email", "").strip().lower()
+        # Accept either "username" or "email" field for flexibility
+        username_or_email = (
+            request.data.get("username") or request.data.get("email") or ""
+        ).strip()
         password = request.data.get("password", "")
         ip = _get_ip(request)
 
-        if not email or not password:
+        if not username_or_email or not password:
             return Response(
-                {"detail": "Email and password are required."},
+                {"detail": "Username/email and password are required."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Look up user by email
+        # Look up user by email or username
+        email = username_or_email.lower()
         try:
             user_obj = User.objects.select_related("agency").get(email=email)
         except User.DoesNotExist:
-            # Don't reveal whether the email exists
-            return Response(
-                {"detail": "Invalid credentials.", "failed_attempts": 0},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            # Try by username (case-insensitive)
+            try:
+                user_obj = User.objects.select_related("agency").get(
+                    username__iexact=username_or_email
+                )
+            except User.DoesNotExist:
+                # Don't reveal whether the account exists
+                return Response(
+                    {"detail": "Invalid credentials.", "failed_attempts": 0},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
 
         # Check account lockout (Requirement 9.5)
         if user_obj.is_locked():

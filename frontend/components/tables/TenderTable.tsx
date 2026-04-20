@@ -31,9 +31,9 @@ function getInitials(name: string) {
 // ── Score badge ───────────────────────────────────────────────────────────────
 function ScoreBadge({ score }: { score: number | null }) {
   if (score === null || score === undefined) return <span className="badge badge-gray">N/A</span>;
-  if (score >= 70) return <span className="score-high">{score}</span>;
-  if (score >= 40) return <span className="score-medium">{score}</span>;
-  return <span className="score-low">{score}</span>;
+  if (score >= 70) return <span className="bg-red-100 text-red-800 score-high">{score}</span>;
+  if (score >= 40) return <span className="bg-amber-100 text-amber-800 score-medium">{score}</span>;
+  return <span className="bg-green-100 text-green-800 score-low">{score}</span>;
 }
 
 // ── Sort icon ─────────────────────────────────────────────────────────────────
@@ -54,7 +54,7 @@ function sortToggle(field: string, current: string) {
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 function SkeletonRow() {
   return (
-    <tr>
+    <tr className="animate-pulse">
       <td style={{ padding: "0.875rem 1rem", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
         <div className="skeleton" style={{ height: 14, width: 90 }} />
       </td>
@@ -107,16 +107,16 @@ function Pagination({ currentPage, totalPages, totalCount, pageSize, onPageChang
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1rem", borderTop: "1px solid var(--border)" }}>
       <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-        {totalCount === 0 ? "No results" : `${from}–${to} of ${totalCount.toLocaleString()}`}
+        {totalCount === 0 ? "No results" : `Showing ${from}–${to} of ${totalCount.toLocaleString()}`}
       </span>
       <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-        <button onClick={() => onPageChange(1)} disabled={currentPage === 1} style={btn(currentPage === 1)}>«</button>
-        <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} style={btn(currentPage === 1)}>‹</button>
+        <button onClick={() => onPageChange(1)} disabled={currentPage === 1} style={btn(currentPage === 1)} aria-label="First page">«</button>
+        <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} style={btn(currentPage === 1)} aria-label="Previous page">‹</button>
         <span style={{ fontSize: "0.72rem", color: "var(--text-secondary)", padding: "0 0.5rem" }}>
           {currentPage} / {totalPages || 1}
         </span>
-        <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage >= totalPages} style={btn(currentPage >= totalPages)}>›</button>
-        <button onClick={() => onPageChange(totalPages)} disabled={currentPage >= totalPages} style={btn(currentPage >= totalPages)}>»</button>
+        <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage >= totalPages} style={btn(currentPage >= totalPages)} aria-label="Next page">›</button>
+        <button onClick={() => onPageChange(totalPages)} disabled={currentPage >= totalPages} style={btn(currentPage >= totalPages)} aria-label="Last page">»</button>
       </div>
     </div>
   );
@@ -155,7 +155,7 @@ export default function TenderTable({ tenders, loading, totalCount, currentPage,
           )}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ fontSize: "0.65rem", color: "var(--text-muted)" }}>Scores are advisory only</span>
+          <span style={{ fontSize: "0.65rem", color: "var(--text-muted)" }}>Scores are advisory only. Human review is required before any action.</span>
         </div>
       </div>
 
@@ -204,7 +204,7 @@ export default function TenderTable({ tenders, loading, totalCount, currentPage,
                         onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
                         onMouseLeave={e => (e.currentTarget.style.color = "var(--text-primary)")}
                       >
-                        #{tender.tender_id}
+                        {tender.tender_id}
                       </Link>
                     </div>
                     <p style={{ fontSize: "0.68rem", color: "var(--text-muted)", marginTop: 2, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>

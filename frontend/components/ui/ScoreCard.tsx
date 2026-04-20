@@ -6,7 +6,7 @@ function getScoreStyle(score: number | null): {
   color: string; glow: string; label: string; trackColor: string;
 } {
   if (score === null || score === undefined) {
-    return { color: "var(--text-muted)", glow: "transparent", label: "No Score", trackColor: "rgba(255,255,255,0.05)" };
+    return { color: "var(--text-muted)", glow: "transparent", label: "N/A", trackColor: "rgba(255,255,255,0.05)" };
   }
   if (score >= 70) return { color: "#f87171", glow: "rgba(239,68,68,0.3)", label: "High Risk", trackColor: "rgba(239,68,68,0.15)" };
   if (score >= 40) return { color: "#fbbf24", glow: "rgba(245,158,11,0.3)", label: "Medium Risk", trackColor: "rgba(245,158,11,0.15)" };
@@ -28,10 +28,12 @@ export default function ScoreCard({ score, loading = false }: ScoreCardProps) {
   if (loading) {
     return (
       <div className="rounded-2xl p-5 w-52" style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
-        <div className="skeleton h-3 w-24 mb-4" />
-        <div className="skeleton h-32 w-32 rounded-full mx-auto mb-4" />
-        <div className="skeleton h-3 w-full mb-2" />
-        <div className="skeleton h-3 w-4/5" />
+        <div className="animate-pulse">
+          <div className="skeleton h-3 w-24 mb-4" />
+          <div className="skeleton h-32 w-32 rounded-full mx-auto mb-4" />
+          <div className="skeleton h-3 w-full mb-2" />
+          <div className="skeleton h-3 w-4/5" />
+        </div>
       </div>
     );
   }
@@ -53,7 +55,9 @@ export default function ScoreCard({ score, loading = false }: ScoreCardProps) {
       {/* Ring */}
       <div className="flex items-center justify-center mb-3">
         <div className="relative w-32 h-32">
-          <svg width="128" height="128" viewBox="0 0 100 100" className="-rotate-90" style={{ display: "block" }}>
+          <svg width="128" height="128" viewBox="0 0 100 100" className="-rotate-90" style={{ display: "block" }}
+            role="progressbar" aria-valuenow={score !== null ? score : undefined} aria-valuemin={0} aria-valuemax={100}
+          >
             {/* Track */}
             <circle cx="50" cy="50" r="40" fill="none" stroke={trackColor} strokeWidth="8" />
             {/* Progress */}
